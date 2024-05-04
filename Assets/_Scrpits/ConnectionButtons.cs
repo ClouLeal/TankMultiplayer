@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class JoinServer : MonoBehaviour
+public class ConnectionButtons : MonoBehaviour
 {
-    public void Join()
+    public void HostStart()
+    {
+        NetworkManager.Singleton.StartHost();
+    }
+
+    public void ClientStart()
     {
         NetworkManager.Singleton.StartClient();
     }
