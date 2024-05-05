@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5974226523905916111}
   - component: {fileID: 1346171259386805406}
   - component: {fileID: 3088868518556026483}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ProjectileBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 152792986099548168}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 200e62a6795a7d74fa04290376ed8922, type: 3}
   m_Name: 
