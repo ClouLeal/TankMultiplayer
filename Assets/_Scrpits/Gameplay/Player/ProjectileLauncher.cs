@@ -75,6 +75,11 @@ public class ProjectileLauncher : NetworkBehaviour
 
         Physics2D.IgnoreCollision(_playerCollider, projectileInstance.GetComponent<Collider2D>());
 
+        if(projectileInstance.TryGetComponent<DealDamageOnContact>(out var dealDamage))
+        {
+            dealDamage.SetOwner(OwnerClientId);
+        }
+
         if (projectileInstance.TryGetComponent<Rigidbody2D>(out var rigidbody2D))
         {
             rigidbody2D.velocity = projectileInstance.transform.up * _projectileSpeed;
