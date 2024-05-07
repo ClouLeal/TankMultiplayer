@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class ProjectileLauncher : NetworkBehaviour
     [SerializeField] private Transform _projectileSpawnTransform;
     [SerializeField] private GameObject _projectileClientPrefab;
     [SerializeField] private GameObject _projectileServerPrefab;
+    [SerializeField] private CoinWalletBehaviour _coinWallet;
 
     [SerializeField] private GameObject _muzzleFlashSprite;
     [SerializeField] private Collider2D _playerCollider;
@@ -19,9 +21,10 @@ public class ProjectileLauncher : NetworkBehaviour
     [SerializeField] private float _projectileSpeed;
     [SerializeField] private float _projectileFireRate;
     [SerializeField] private float _muzzleFlashDuration;
+    [SerializeField] private int _costToFire;
 
     private bool _shouldFire;
-    private float _previousFiteTime;
+    private float _timer;
     private float _muzzleFlashTimer;
 
     public override void OnNetworkSpawn()
@@ -57,19 +60,26 @@ public class ProjectileLauncher : NetworkBehaviour
         }
 
         if(!IsOwner) return;
-        if(!_shouldFire) return;
 
-        if (Time.time < (1 / _projectileFireRate) + _previousFiteTime) return;
+        _timer -= Time.deltaTime;
+
+        if (!_shouldFire) return;
+
+        if (_timer > 0) return;
+
+        if (_coinWallet.TotalConins.Value < _costToFire) return;
 
         SpawnDummyProjectile(_projectileSpawnTransform.position, _projectileSpawnTransform.up);
         PrimaryFireServerRpc(_projectileSpawnTransform.position, _projectileSpawnTransform.up);
 
-        _previousFiteTime = Time.time;
+        _timer = 1/_projectileFireRate;
     }
 
     [ServerRpc]
     private void PrimaryFireServerRpc(Vector3 spawnPos, Vector3 direction)
     {
+        if (!_coinWallet.TrySpendCoins(_costToFire)) return;
+
         var projectileInstance = Instantiate(_projectileServerPrefab, spawnPos, Quaternion.identity);
         projectileInstance.transform.up = direction;
 

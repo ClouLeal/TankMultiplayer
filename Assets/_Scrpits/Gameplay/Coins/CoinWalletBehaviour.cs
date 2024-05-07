@@ -18,4 +18,12 @@ public class CoinWalletBehaviour : NetworkBehaviour
             TotalConins.Value += coinCollectedValue;
         }
     }
+
+    public bool TrySpendCoins(int coins)
+    {
+        if(TotalConins.Value < coins) return false;
+
+        TotalConins.Value -= coins;
+        return true;
+    }
 }
