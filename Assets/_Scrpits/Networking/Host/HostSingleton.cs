@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ public class HostSingleton : MonoBehaviour
 {
     private static HostSingleton instance;
 
-    private HostGameManager _gameManager;
+    public HostGameManager GameManager { get; private set; }
 
     public static HostSingleton Instance
     {
@@ -32,6 +33,11 @@ public class HostSingleton : MonoBehaviour
 
     public void CreateHost()
     {
-        _gameManager = new HostGameManager();
+        GameManager = new HostGameManager();
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Dispose();
     }
 }
